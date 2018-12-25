@@ -1,6 +1,6 @@
 {
   "name": "react-central-state",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "description": "Global state manager for react.",
   "main": "lib/index.js",
   "scripts": {

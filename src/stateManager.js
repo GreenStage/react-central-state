@@ -3,6 +3,11 @@ import {ComponentTreeNode} from './componentTreeNode';
 
 var _stateManagers_ = {};
 
+/**
+ * State Manager Class
+ * Mantains the state and dspaches callbacks calls
+ * and components  updates if needed.
+ */
 export class StateManager{
 
 	/**

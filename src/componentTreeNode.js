@@ -35,7 +35,9 @@ export class ComponentTreeNode{
 	 * @param {boolean} force, whether or not to update regardless of the triggers
 	 */
 	prepareUpdate = function(triggered,force){
-		if(!this._isRoot && (force || haveCommon(this._triggers,triggered))){
+		if(!this._isRoot && (force || this._triggers.length === 0 ||
+			haveCommon(this._triggers,triggered))){
+
 			if(!this._isRoot){
 				console.log("prepare update "+ this._component.constructor.name)
 				console.log(triggered)
@@ -59,7 +61,7 @@ export class ComponentTreeNode{
 			if(!this._isRoot){
 				console.log("flush update "+ this._component.constructor.name+ " "+ this._pendingUpdate)
 			}
-			this._component._updateFromGState_();
+			this._component._onGlobalStateUpdated_();
 		}else{
 			for(var i =0; i < this._childs.length; i++){
 				this._childs[i].flushUpdate();

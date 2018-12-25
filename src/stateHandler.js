@@ -1,15 +1,8 @@
-/**
- * Created by Eduardo Gomes @ 8/10/2018
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this project
- *
-**/
-
 import {StateManager} from './stateManager.js';
 
 /**
- * StateHandler instances can subscribe
+ * StateHandler instances can listen and change the current
+ * central state, as well as provide callbacks for its changes.
  */
 export class StateHandler{
 	
@@ -27,23 +20,48 @@ export class StateHandler{
 		})
 	}
 
+	/**
+	 * @returns {string} the statekey refering to the
+	 * declared state
+	 */
 	useState(){
 		return StateManager.defaultDescriptor;
 	}
 
+	/**
+	 * @param {Object} partialstate object with keys and
+	 * properties to assign to the current state
+	 */
 	setCentralState(partialstate){
-		return this._stateManager_.setPartial(partialstate);
+		this._stateManager_.setPartial(partialstate);
 	}
 
+	/**
+	 * Adds a callback to be called when at least one
+	 * of the state properties with its key belonging 
+	 * to triggers changes
+	 * @param {Function} callback function to 
+	 * call when the change occurs 
+	 * @param {...string} triggers properties keys that 
+	 * will trigger the callback on changing
+	 */
 	addCentralStateListener(callback,...triggers){
-		return this._stateManager_.addListener(callback,triggers)
+		this._stateManager_.addListener(callback,triggers)
 	}
 
+	/**
+	 * Removes a callback if it is registered.
+	 * @param {Function} callback function registered
+	 * with addCentralStateListener
+	 */
 	removeCentralStateListener(callback){
-		return this._stateManager_.removeListener(callback)
+		this._stateManager_.removeListener(callback)
 	}
 
-	resetState(){ 
-		return this._stateManager_.reset();
+	/**
+	 * Resets the state properties
+	 */
+	resetCentralState(){ 
+		this._stateManager_.reset();
 	}
 }

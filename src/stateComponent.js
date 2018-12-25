@@ -1,42 +1,45 @@
-/**
- * Created by Eduardo Gomes @ 8/10/2018
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this project
- *
-**/
-
 import React from 'react';
 import {StateManager} from './stateManager.js';
 
+/**
+ * A react component that also operates and
+ * updates with certain central state changes.
+ */
 export class StateComponent extends React.Component{
 
+	/**
+	 * @constructor
+	 * Creates and registers the component on the 
+	 * central state operators.
+	 * @param {} props 
+	 */
 	constructor(props){
 		super(props)
 
+		//Tell the state manager which state are we operating in.
 		this._stateManager_ = StateManager.Declare(this.useState());
 
+		//For easy access
 		Object.defineProperty(this,'globalState',{
 			writable: 'false',
 			value: this._stateManager_._store
 		});
 
-		this._stateBranch_ = this._stateManager_.registerComponent(this,this.triggers());
+		//Request a tree node to notify changes
+		this._stateTreeNode_ = this._stateManager_.registerComponent(this,this.triggers());
 			
-
-		
-		/*Copy current methods prototypes*/
+		//Copy current overwritten methods prototypes
 		this.childClass_componentDidMount = this.__proto__.componentDidMount;
 		this.childClass_componentWillUnmount = this.__proto__.componentWillUnmount;
 		this.childClass_componentDidUpdate = this.__proto__.componentDidUpdate;
 		this.childClass_render = this.__proto__.render
 		
-		/*Re-declare relevant react element life-cycle methods here to
-		ensure no react component child class overrote essential instructions*/
+		//Wrapp all overwritten methods with essential instructions
+		//to the well being of the central state
 		this.componentDidMount = function(){
-			this._stateManager_.onComponentMounted(this._stateBranch_);
+			//notify central state this tree node was mounted.
+			this._stateManager_.onComponentMounted(this._stateTreeNode_);
 
-			this._ismounted = true;
 			if(this.childClass_componentDidMount){
 				this.childClass_componentDidMount();
 			}
@@ -46,12 +49,13 @@ export class StateComponent extends React.Component{
 			if(this.childClass_componentWillUnmount){
 				this.childClass_componentWillUnmount();
 			}
-			this._ismounted = false;
-			this._stateManager_.unRegisterComponent(this._stateBranch_);
+			//remove this node from the cental state components tree.
+			this._stateManager_.unRegisterComponent(this._stateTreeNode_);
 		}
 		
 		this.componentDidUpdate = (prevProps, prevState, snapshot) =>{
-			this._stateManager_.onComponentUpdated(this._stateBranch_);
+			//notify central state this tree node finish updating.
+			this._stateManager_.onComponentUpdated(this._stateTreeNode_);
 
 			if(this.childClass_componentDidUpdate){
 				this.childClass_componentDidUpdate(prevProps, prevState, snapshot);
@@ -59,47 +63,96 @@ export class StateComponent extends React.Component{
 		}
 
 		this.render = function(){
-			this._stateManager_.onComponentUpdating(this._stateBranch_);
+			//notify central state this tree node is updating.
+			this._stateManager_.onComponentUpdating(this._stateTreeNode_);
 			return this.childClass_render()
+		}
+
+		this._onGlobalStateUpdated_ = function(){
+			//Give the child class an opportunity to cancel the
+			//component update
+			if(this.onGlobalStateUpdated() === true){
+				this.forceUpdate();
+			}
 		}
 	}
 
-	_updateFromGState_(){
-		if(this._ismounted === true){
-			this.forceUpdate();
-		}
-	};
+	/**
+	 * @final
+	 * @param {Object} partialstate object with keys and
+	 * properties to assign to the current state
+	 */
+	setCentralState(partialstate){
+		this._stateManager_.setPartial(partialstate);
+	}
 
+	/**
+	 * @final
+	 * Adds a callback to be called when at least one
+	 * of the state properties with its key belonging 
+	 * to triggers changes
+	 * @param {Function} callback function to 
+	 * call when the change occurs 
+	 * @param {...string} triggers properties keys that 
+	 * will trigger the callback on changing
+	 */
+	addCentralStateListener(callback,...triggers){
+		this._stateManager_.addListener(callback,triggers)
+	}
+
+	/**
+	 * @final
+	 * Removes a callback if it is registered.
+	 * @param {Function} callback function registered
+	 * with addCentralStateListener
+	 */
+	removeCentralStateListener(callback){
+		this._stateManager_.removeListener(callback)
+	}
+
+	/**
+	 * @final
+	 * Resets the state properties
+	 */
+	resetCentralState(){ 
+		this._stateManager_.reset();
+	}
+
+	
+	/**
+	 * @returns {string} the statekey refering to the
+	 * declared state
+	 * The component should overwrite this method if
+	 * it wants to operate in central state other than
+	 * the dafault one
+	 */
 	useState(){
 		return StateManager.defaultDescriptor;
 	}
 
+
+	/**
+	 * Called after the global state updates with relevant
+	 * changes on the properties referenced by triggers
+	 * method.
+	 * @returns {boolean} If the component should update 
+	 * with this changes. Defaults to true.
+	 */
+	onGlobalStateUpdated(){
+		return true
+	};
+
+
+	/**
+	 * IMPLEMENTATION REQUIRED
+	 * Should return an array of strings representing
+	 * the keys of state's properties that should trigger
+	 * an update on this component.
+	 * @returns {Array<string>} keys that trigger
+	 * update when changed.
+	 */
 	triggers(){
-		return []
+		throw new Error("No triggers() function implemented");
 	}
 
-	isMounted(){
-		return this._ismounted;
-	}
-
-	resetState(){
-		return this._stateManager_.reset();
-	}
-
-	setCentralState(partialstate){
-		return this._stateManager_.setPartial(partialstate);
-	}
-
-	addCentralStateListener(callback,...triggers){
-		return this._stateManager_.addListener(callback,triggers)
-	}
-
-	removeCentralStateListener(callback){
-		return this._stateManager_.removeListener(callback)
-	}
-
-	/*Dummy methods to preserve inheritance chain*/
-	componentDidMount(){}
-	componentWillUnmount(){}
-	componentDidUpdate(prevProps, prevState, snapshot){}
-}
+}	
