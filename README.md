@@ -1,6 +1,8 @@
 # react-central-state
-Easy to use global state for React
-Shared along all components, and updatedes them in a tree-like manner.
+Easy to use global state for React.  
+Shared along all components, updating them in a tree-like manner.  
+No reducers, no actions, no providers.
+
 ## Installation
 
 Requires react *16.4.0* or later
@@ -14,9 +16,9 @@ import {StateComponent} from 'react-central-state'
 // or , if you want to operate the state on a non react-component class
 import {StateHandler} from 'react-central-state'
 ```
-Your component should extend `StateComponent`.
+Your components should now extend `StateComponent`.
 
-You can read and update the state pretty much like in react's default one:
+Reading and updating the state is pretty much like in normal react:
 ```javascript
 //Reading from state
 this.centralState.SomeProperty
@@ -32,10 +34,12 @@ triggers(){
     return['Foo','SomeOtherProperty','SomeOtherProperty2'];
 }
 ```
-**That's pretty much it.**
+<h3>
+    <b>That's pretty much it.</b>
+</h3>
+&nbsp;
 
-
-You can also subscribe callbacks to some property changes on the central state, either on a `StateComponent` or a `StateHandler`, with `addCentralStateListener` :
+You can also subscribe callbacks to central state properties' changes, either on a `StateComponent` or a `StateHandler`, with `addCentralStateListener` :
 
 ```javascript
 this.callback = function(){
@@ -43,8 +47,8 @@ this.callback = function(){
     ...
 };
 
-//Call this method with a callback function and a property
-//key name that will said function when it changes.
+//Call this method with a callback function and a state property
+//key name that will trigger said function when it changes.
 this.addCentralStateListener(this.callback,'foo');
 ```
 
@@ -61,4 +65,7 @@ componentWillUnmount(){
 ### How Does It Work?
 The state manager keeps an updated tree of components hierarchy, by analyzing the mounting/updating order. 
 When an update is done to the state, the tree is runned in a dfs lookup dispatching an update if needed.
-<img alt="React-central-state update flow" src="docs/stateDiagram.png" align="center" />
+
+<p align="center">
+    <img alt="React-central-state update flow" src="docs/stateDiagram.png" />
+</p>
