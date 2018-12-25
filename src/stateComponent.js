@@ -20,7 +20,7 @@ export class StateComponent extends React.Component{
 		this._stateManager_ = StateManager.Declare(this.useState());
 
 		//For easy access
-		Object.defineProperty(this,'globalState',{
+		Object.defineProperty(this,'centralState',{
 			writable: 'false',
 			value: this._stateManager_._store
 		});
@@ -68,10 +68,10 @@ export class StateComponent extends React.Component{
 			return this.childClass_render()
 		}
 
-		this._onGlobalStateUpdated_ = function(){
+		this._onCentralStateUpdated_ = function(){
 			//Give the child class an opportunity to cancel the
 			//component update
-			if(this.onGlobalStateUpdated() === true){
+			if(this.onCentralStateUpdated() === true){
 				this.forceUpdate();
 			}
 		}
@@ -132,13 +132,13 @@ export class StateComponent extends React.Component{
 
 
 	/**
-	 * Called after the global state updates with relevant
+	 * Called after the central state updates with relevant
 	 * changes on the properties referenced by triggers
 	 * method.
 	 * @returns {boolean} If the component should update 
 	 * with this changes. Defaults to true.
 	 */
-	onGlobalStateUpdated(){
+	onCentralStateUpdated(){
 		return true
 	};
 
@@ -146,9 +146,9 @@ export class StateComponent extends React.Component{
 	/**
 	 * IMPLEMENTATION REQUIRED
 	 * Should return an array of strings representing
-	 * the keys of state's properties that should trigger
+	 * state's properties that should trigger
 	 * an update on this component.
-	 * @returns {Array<string>} keys that trigger
+	 * @returns {Array<string>} properties that trigger an update
 	 * update when changed.
 	 */
 	triggers(){

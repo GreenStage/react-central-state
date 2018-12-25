@@ -14,7 +14,7 @@ export class StateHandler{
 	constructor(){
 		this._stateManager_ = StateManager.Declare(this.useState());
 
-		Object.defineProperty(this,'globalState',{
+		Object.defineProperty(this,'centralState',{
 			writable: 'false',
 			value: this._stateManager_._store
 		})

@@ -11,7 +11,7 @@ var _stateManagers_ = {};
 export class StateManager{
 
 	/**
-	 * Constructs a new global state manager
+	 * Constructs a new central state manager
 	 * @constructor
 	 * @param {State} other existing state to copy data from
 	 * @private
@@ -32,9 +32,9 @@ export class StateManager{
 
 
 	/**
-	 * Sets a portion of the global state
+	 * Sets a portion of the central state
 	 * @param {Object} partialstate object to copy keys and values
-	 * to the global state store
+	 * to the central state store
 	 * @package
 	 */
 	setPartial(partialstate){
@@ -50,7 +50,7 @@ export class StateManager{
 
 	/**
 	 * Resets the store
-	 * to the global state store
+	 * to the central state store
 	 * @package
 	 */
 	reset(){

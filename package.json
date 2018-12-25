@@ -1,6 +1,6 @@
 {
   "name": "react-central-state",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "Global state manager for react.",
   "main": "lib/index.js",
   "scripts": {
@@ -25,14 +25,14 @@
   },
   "homepage": "https://github.com/GreenStage/react-central-state#readme",
   "peerDependencies": {
-    "react": "^15.0.0"
+    "react": "^16.4.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
-    "react": "^15.0.0",
+    "react": "^16.4.0",
     "react-addons-test-utils": "15.6.2"
   }
 }
