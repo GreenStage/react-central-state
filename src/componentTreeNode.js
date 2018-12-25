@@ -34,7 +34,7 @@ export class ComponentTreeNode{
 	 * @param {Array<string>} triggered , property keys that fired an update
 	 * @param {boolean} force, whether or not to update regardless of the triggers
 	 */
-	prepareUpdate = function(triggered,force){
+	prepareUpdate(triggered,force){
 		if(!this._isRoot && (force || this._triggers.length === 0 ||
 			haveCommon(this._triggers,triggered))){
 
@@ -56,7 +56,7 @@ export class ComponentTreeNode{
 	 * If the component updated after calling prepareUpdate,
 	 * the update is considered useless and canceled
 	 */
-	flushUpdate = function(){
+	flushUpdate(){
 		if(this._pendingUpdate === true){
 			if(!this._isRoot){
 				console.log("flush update "+ this._component.constructor.name+ " "+ this._pendingUpdate)
@@ -72,21 +72,21 @@ export class ComponentTreeNode{
 	/**
 	 * Callback for component updates
 	 */
-	onUpdate = function(){
+	onUpdate(){
 		this._pendingUpdate = false;
 	}
 
 	/**
 	 * @returns {Object} stateComponent instance
 	 */
-	getComponent = function(){
+	getComponent(){
 		return this._component;
 	}
 
 	/**
 	 * @returns {Object} tree node's parent
 	 */
-	getParent = function(){
+	getParent(){
 		return this._parent;
 	}
 
@@ -94,7 +94,7 @@ export class ComponentTreeNode{
 	 * @param {int} idx index of the requested child
 	 * @returns {Object} child at given index
 	 */
-	getChild = function(idx){
+	getChild(idx){
 		if(idx > -1 && idx < this._childs.length){
 			return this._childs[idx]
 		}else{
@@ -106,7 +106,7 @@ export class ComponentTreeNode{
 	 * Adds a child not if not exists already.
 	 * @param {Object}child  tree node child
 	 */
-	ensureChild = function(child){
+	ensureChild(child){
 		let idx = this._childs.indexOf(child);
 		if(idx < 0){
 			this._childs.push(child)
@@ -114,7 +114,7 @@ export class ComponentTreeNode{
 		}
 	}
 
-	removeChild = function(child){
+	removeChild(child){
 		let idx = this._childs.indexOf(child);
 		if(idx > -1){
 			this._childs.splice(idx,1)
