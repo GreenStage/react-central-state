@@ -1,0 +1,4 @@
+#gitignore
+lib/
+node_modules/
+.npmignore
