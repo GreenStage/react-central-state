@@ -50,12 +50,12 @@ export class ComponentTreeNode{
 	 * If the component updated after calling prepareUpdate,
 	 * the update is considered useless and canceled
 	 */
-	flushUpdate(){
+	flushUpdate(prevState){
 		if(this._pendingUpdate === true){
-			this._component._onCentralStateUpdated_();
+			this._component._onCentralStateUpdated_(prevState);
 		}else{
 			for(var i =0; i < this._childs.length; i++){
-				this._childs[i].flushUpdate();
+				this._childs[i].flushUpdate(prevState);
 			}
 		}
 	}

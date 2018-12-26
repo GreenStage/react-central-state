@@ -5,7 +5,8 @@ export class Display extends StateComponent {
 	constructor(props){
 		super(props);
 
-		this.addCentralStateListener(()=>{
+		this.addCentralStateListener((prevstate)=>{
+		
 			let todos = this.centralState.todos || [];
 			todos.unshift(this.centralState.new_todo);
 			this.setCentralState({

@@ -5,7 +5,7 @@ var _stateManagers_ = {};
 
 /**
  * State Manager Class
- * Mantains the state and dspaches callbacks calls
+ * Mantains the state and dispatches callbacks calls
  * and components  updates if needed.
  */
 export class StateManager{
@@ -38,13 +38,17 @@ export class StateManager{
 	 * @package
 	 */
 	setPartial(partialstate){
-		this._store = Object.assign(this._store,partialstate)
-
 		var triggered = Object.keys(partialstate);
 
+		var prevstate = Object.assign({}, this._store);
+
+		this._store = Object.assign(this._store,partialstate);
+
 		this.markComponentsForUpdate(triggered,false);
-		this.notifyListeners(triggered);
-		this.flushComponentsUpdate();
+
+		this.notifyListeners(triggered,prevstate);
+
+		this.flushComponentsUpdate(prevstate);
 	}
 
 
@@ -58,16 +62,18 @@ export class StateManager{
 		for(let i = 0; i < keys.length; i++){
 			delete this._store[keys[i]];
 		}
+
+		var old_store = this._store;
 		this._store = {};
 		this.markComponentsForUpdate([],true);
-		this.flushComponentsUpdate();
+		this.flushComponentsUpdate(old_store);
 	}
 
 
 	/**
 	 * Registers a new callback to be called when the store 
 	 * performs a change to any of the keys belonging to triggers
-	 * @param {Object} callback The callback function to register.
+	 * @param {centralStateListener} callback The callback function to register.
 	 * @param {...string} triggers list of keys that will proc the callback
 	 * when their value(s) change
 	 * @package
@@ -83,7 +89,7 @@ export class StateManager{
 
 	/**
 	 * Removes a callback from the store
-	 * @param {Function} callback The callback function to remove.
+	 * @param {centralStateListener} callback The callback function to remove.
 	 * when their value(s) change
 	 * @package
 	 */
@@ -106,13 +112,14 @@ export class StateManager{
 	/**
 	 * Notifies registered callbacks, if they subscribe to 
 	 * at least one of the changed store attributes.
-	 * @param {Function} callback The callback function to remove.
+	 * @param {Object} triggered - Changed properties
+	 * @param {Function} prevState - State store before updating
 	 * @private
 	 */
-	notifyListeners(triggered){
+	notifyListeners(triggered,prevState){
 		for(var r of this._registeredListeners){
 			if(haveCommon(r.triggers,triggered)){
-				r.callback();
+				r.callback(prevState);
 			}
 		}
 	}
@@ -121,9 +128,9 @@ export class StateManager{
 	 * Goes trough the update tree marking relevant components for 
 	 * update
 	 * @param {Array<string>} triggered Triggered properties keys
-	 * @param {boolean=} all True if all the update should trigger 
-	 * all components updating methods regardless of the passed triggered
-	 * properties
+	 * @param {boolean=} all True if the update should trigger 
+	 * all components updating methods regardless of the passed
+	 * triggered properties
 	 * @private
 	 */
 	markComponentsForUpdate(triggered,all){
@@ -136,8 +143,8 @@ export class StateManager{
 	 * Rolls down the tree updating marked components
 	 * @private
 	 */
-	flushComponentsUpdate(){
-		this._treeRoot.flushUpdate();
+	flushComponentsUpdate(prevState){
+		this._treeRoot.flushUpdate(prevState);
 	}
 
 
@@ -189,8 +196,8 @@ export class StateManager{
 
 
 	/**
-	 * Registers a component for possible update when at least
-	 * one of the triggers properties updates
+	 * Adds a component to the update tree, for a possible update
+	 * when at least one of the triggers properties changes
 	 * @param {Object} component, component to register
 	 * @param {Array<string>} triggers trigger keys that may proc
 	 * @return {ComponentTreeNode} the branch created
@@ -202,11 +209,8 @@ export class StateManager{
 	}
 
 	/**
-	 * Registers a component for possible update when at least
-	 * one of the triggers properties updates
-	 * @param {Object} component, component to register
-	 * @param {Array<string>} triggers trigger keys that may proc
-	 * an update on the component
+	 * Removes a component from the updating tree.
+	 * @param {Object} component, component to remove	
 	 * @package
 	 */
 	unRegisterComponent(branch){
@@ -243,3 +247,10 @@ export class StateManager{
 }
 
 StateManager.defaultDescriptor  = "default"
+
+
+/**
+ * Callback that takes a snapshot of the central state before updating as an argument
+ * @callback centralStateListener
+ * @param {Object} prevState
+ */

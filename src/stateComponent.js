@@ -25,8 +25,10 @@ export class StateComponent extends React.Component{
 			value: this._stateManager_._store
 		});
 
+		this._triggers_ = this.triggers();
+
 		//Request a tree node to notify changes
-		this._stateTreeNode_ = this._stateManager_.registerComponent(this,this.triggers());
+		this._stateTreeNode_ = this._stateManager_.registerComponent(this,this._triggers_);
 			
 		//Copy current overwritten methods prototypes
 		this.childClass_componentDidMount = this.__proto__.componentDidMount;
@@ -68,10 +70,10 @@ export class StateComponent extends React.Component{
 			return this.childClass_render()
 		}
 
-		this._onCentralStateUpdated_ = function(){
+		this._onCentralStateUpdated_ = function(prevState){
 			//Give the child class an opportunity to cancel the
 			//component update
-			if(this.onCentralStateUpdated() === true){
+			if(this.onCentralStateUpdated(prevState) !== false){
 				this.forceUpdate();
 			}
 		}
@@ -91,7 +93,7 @@ export class StateComponent extends React.Component{
 	 * Adds a callback to be called when at least one
 	 * of the state properties with its key belonging 
 	 * to triggers changes
-	 * @param {Function} callback function to 
+	 * @param {centralStateListener} callback function to 
 	 * call when the change occurs 
 	 * @param {...string} triggers properties keys that 
 	 * will trigger the callback on changing
@@ -103,7 +105,7 @@ export class StateComponent extends React.Component{
 	/**
 	 * @final
 	 * Removes a callback if it is registered.
-	 * @param {Function} callback function registered
+	 * @param {centralStateListener} callback function registered
 	 * with addCentralStateListener
 	 */
 	removeCentralStateListener(callback){
@@ -135,10 +137,11 @@ export class StateComponent extends React.Component{
 	 * Called after the central state updates with relevant
 	 * changes on the properties referenced by triggers
 	 * method.
+	 * @param {Object} prevState snapshot of the central state before updating.
 	 * @returns {boolean} If the component should update 
 	 * with this changes. Defaults to true.
 	 */
-	onCentralStateUpdated(){
+	onCentralStateUpdated(prevState){
 		return true
 	};
 
