@@ -36,11 +36,6 @@ export class ComponentTreeNode{
 	 */
 	prepareUpdate(triggered,force){
 		if(!this._isRoot && (force || haveCommon(this._triggers,triggered))){
-
-			if(!this._isRoot){
-				console.log("prepare update "+ this._component.constructor.name)
-				console.log(triggered)
-			}
 			this._pendingUpdate = true;
 		}else{
 			for(var i =0; i < this._childs.length; i++){
@@ -57,9 +52,6 @@ export class ComponentTreeNode{
 	 */
 	flushUpdate(){
 		if(this._pendingUpdate === true){
-			if(!this._isRoot){
-				console.log("flush update "+ this._component.constructor.name+ " "+ this._pendingUpdate)
-			}
 			this._component._onCentralStateUpdated_();
 		}else{
 			for(var i =0; i < this._childs.length; i++){
