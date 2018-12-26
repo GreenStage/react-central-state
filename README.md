@@ -39,7 +39,7 @@ triggers(){
 </h3>
 &nbsp;
 
-You can also subscribe callbacks to central state properties' changes, either on a `StateComponent` or a `StateHandler`, with `addCentralStateListener` :
+You can also subscribe callbacks to central state properties changes, either on a `StateComponent` or a `StateHandler`, with `addCentralStateListener` :
 
 ```javascript
 this.callback = function(){

@@ -35,7 +35,7 @@ export class StateComponent extends React.Component{
 		this.childClass_render = this.__proto__.render
 		
 		//Wrapp all overwritten methods with essential instructions
-		//to the well being of the central state
+		//required to the proper work of the central state
 		this.componentDidMount = function(){
 			//notify central state this tree node was mounted.
 			this._stateManager_.onComponentMounted(this._stateTreeNode_);
@@ -53,7 +53,7 @@ export class StateComponent extends React.Component{
 			this._stateManager_.unRegisterComponent(this._stateTreeNode_);
 		}
 		
-		this.componentDidUpdate = (prevProps, prevState, snapshot) =>{
+		this.componentDidUpdate = function(prevProps, prevState, snapshot){
 			//notify central state this tree node finish updating.
 			this._stateManager_.onComponentUpdated(this._stateTreeNode_);
 
