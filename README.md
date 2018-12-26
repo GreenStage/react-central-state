@@ -39,16 +39,28 @@ triggers(){
 </h3>
 &nbsp;
 
+### Handling changes before re-rendering
+`StateComponent` instances can intercept updates with the `onCentralStateUpdated` method:
+```javascript
+//Invoked before rendering, receives a snapshot of the previous state as argument.
+//should return true if the component should update,or false otherwise. defaults to true.
+onCentralStateUpdated(prevState){
+    return true;
+}
+```
+
+### Handling changes without triggering an update
 You can also subscribe callbacks to central state properties changes, either on a `StateComponent` or a `StateHandler`, with `addCentralStateListener` :
 
 ```javascript
-this.callback = function(){
+//callback receives a snapshot of the previous state.
+this.callback = function(prevState){
     let foo = this.centralState.foo;
     ...
 };
 
-//Call this method with a callback function and a state property
-//key name that will trigger said function when it changes.
+//Pass the callback, with a central state property key, 
+//that when changes value will invoke it.
 this.addCentralStateListener(this.callback,'foo');
 ```
 
@@ -62,7 +74,7 @@ componentWillUnmount(){
 ```
 
 
-### How Does It Work?
+## How Does It Work?
 The state manager keeps an updated tree of components hierarchy, by analyzing the mounting/updating order. 
 When an update is done to the state, the tree is runned in a dfs lookup dispatching an update if needed.
 
