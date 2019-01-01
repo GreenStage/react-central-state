@@ -9,11 +9,15 @@ export class Display extends StateComponent {
 		
 			let todos = this.centralState.todos || [];
 			todos.unshift(this.centralState.new_todo);
-			this.setCentralState({
+			this.todoListener = this.setCentralState({
 				todos,
 				confirmation: this.centralState.new_todo +" added!"
 			});
 		},"new_todo");
+	}
+
+	componentWillUnmount(){
+		this.removeCentralStateListener(this.todoListener);
 	}
 
 	removeTodo(idx){

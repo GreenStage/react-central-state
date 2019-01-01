@@ -1,7 +1,7 @@
 {
   "name": "react-central-state",
-  "version": "1.0.7",
-  "description": "Global state manager for react.",
+  "version": "1.0.9",
+  "description": "Global state for react.",
   "main": "lib/index.js",
   "scripts": {
     "compile": "babel --presets es2015,stage-0 -d lib/ src/",
@@ -12,11 +12,14 @@
     "url": "git+https://github.com/GreenStage/react-central-state.git"
   },
   "keywords": [
-    "react",
+	"react",
+    "reactjs",
+	"react-component",
     "central",
     "state",
     "global",
-    "store"
+	"store",
+	"state management"
   ],
   "author": "Eduardo Gomes <technikome@gmail.com>",
   "license": "MIT",

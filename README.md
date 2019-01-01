@@ -73,10 +73,9 @@ componentWillUnmount(){
 }
 ```
 
-
 ## How Does It Work?
-The state manager keeps an updated tree of components hierarchy, by analyzing the mounting/updating order. 
-When an update is done to the state, the tree is runned in a dfs lookup dispatching an update if needed.
+The store keeps updated info of the mounted components hierarchy, by analyzing their mounting/updating order. 
+When  the state changes, the tree is runned in a dfs lookup dispatching updates to each component if needed.
 
 <p align="center">
     <img alt="React-central-state update flow" src="docs/stateDiagram.png" />

@@ -1,5 +1,5 @@
 import React from 'react';
-import {StateManager} from './stateManager.js';
+import {Store} from './store.js';
 
 /**
  * A react component that also operates and
@@ -16,19 +16,19 @@ export class StateComponent extends React.Component{
 	constructor(props){
 		super(props)
 
-		//Tell the state manager which state are we operating in.
-		this._stateManager_ = StateManager.Declare(this.useState());
+		//Declared the store we will be using
+		this._store_ = Store.Declare(this.useState());
 
 		//For easy access
 		Object.defineProperty(this,'centralState',{
 			writable: 'false',
-			value: this._stateManager_._store
+			value: this._store_._state
 		});
 
 		this._triggers_ = this.triggers();
 
 		//Request a tree node to notify changes
-		this._stateTreeNode_ = this._stateManager_.registerComponent(this,this._triggers_);
+		this._stateTreeNode_ = this._store_.registerComponent(this,this._triggers_);
 			
 		//Copy current overwritten methods prototypes
 		this.childClass_componentDidMount = this.__proto__.componentDidMount;
@@ -40,7 +40,7 @@ export class StateComponent extends React.Component{
 		//required to the proper work of the central state
 		this.componentDidMount = function(){
 			//notify central state this tree node was mounted.
-			this._stateManager_.onComponentMounted(this._stateTreeNode_);
+			this._store_.onComponentMounted(this._stateTreeNode_);
 
 			if(this.childClass_componentDidMount){
 				this.childClass_componentDidMount();
@@ -52,12 +52,12 @@ export class StateComponent extends React.Component{
 				this.childClass_componentWillUnmount();
 			}
 			//remove this node from the cental state components tree.
-			this._stateManager_.unRegisterComponent(this._stateTreeNode_);
+			this._store_.unRegisterComponent(this._stateTreeNode_);
 		}
 		
 		this.componentDidUpdate = function(prevProps, prevState, snapshot){
 			//notify central state this tree node finish updating.
-			this._stateManager_.onComponentUpdated(this._stateTreeNode_);
+			this._store_.onComponentUpdated(this._stateTreeNode_);
 
 			if(this.childClass_componentDidUpdate){
 				this.childClass_componentDidUpdate(prevProps, prevState, snapshot);
@@ -66,7 +66,7 @@ export class StateComponent extends React.Component{
 
 		this.render = function(){
 			//notify central state this tree node is updating.
-			this._stateManager_.onComponentUpdating(this._stateTreeNode_);
+			this._store_.onComponentUpdating(this._stateTreeNode_);
 			return this.childClass_render()
 		}
 
@@ -85,7 +85,7 @@ export class StateComponent extends React.Component{
 	 * properties to assign to the current state
 	 */
 	setCentralState(partialstate){
-		this._stateManager_.setPartial(partialstate);
+		this._store_.setPartial(partialstate);
 	}
 
 	/**
@@ -99,7 +99,7 @@ export class StateComponent extends React.Component{
 	 * will trigger the callback on changing
 	 */
 	addCentralStateListener(callback,...triggers){
-		this._stateManager_.addListener(callback,triggers)
+		this._store_.addListener(callback,triggers)
 	}
 
 	/**
@@ -109,7 +109,7 @@ export class StateComponent extends React.Component{
 	 * with addCentralStateListener
 	 */
 	removeCentralStateListener(callback){
-		this._stateManager_.removeListener(callback)
+		this._store_.removeListener(callback)
 	}
 
 	/**
@@ -117,7 +117,7 @@ export class StateComponent extends React.Component{
 	 * Resets the state properties
 	 */
 	resetCentralState(){ 
-		this._stateManager_.reset();
+		this._store_.reset();
 	}
 
 	
@@ -129,7 +129,7 @@ export class StateComponent extends React.Component{
 	 * the dafault one
 	 */
 	useState(){
-		return StateManager.defaultDescriptor;
+		return Store.defaultDescriptor;
 	}
 
 

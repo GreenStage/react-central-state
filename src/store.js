@@ -1,29 +1,29 @@
 import {haveCommon} from './utils';
 import {ComponentTreeNode} from './componentTreeNode';
 
-var _stateManagers_ = {};
+var _states_ = {};
 
 /**
  * State Manager Class
  * Mantains the state and dispatches callbacks calls
  * and components  updates if needed.
  */
-export class StateManager{
+export class Store{
 
 	/**
-	 * Constructs a new central state manager
+	 * Creates a new store instance
 	 * @constructor
-	 * @param {State} other existing state to copy data from
+	 * @param {Store} other existing state to copy data from
 	 * @private
 	 */
 	constructor(other){
 		if(other){
 			this._registeredListeners = other._registeredListeners || [];
-			this._store = other.store || {};
+			this._state = other._state || {};
 			this._treeRoot = other._treeRoot || {};
 		}else{
 			this._registeredListeners = [];
-			this._store = {};
+			this._state = {};
 			this._treeRoot = new ComponentTreeNode(null,[],true);
 		}
 		this._updatestack = [this._treeRoot];
@@ -33,16 +33,16 @@ export class StateManager{
 
 	/**
 	 * Sets a portion of the central state
-	 * @param {Object} partialstate object to copy keys and values
-	 * to the central state store
+	 * @param {Object} partialstate object to assign key/values
+	 * to the state
 	 * @package
 	 */
 	setPartial(partialstate){
 		var triggered = Object.keys(partialstate);
 
-		var prevstate = Object.assign({}, this._store);
+		var prevstate = Object.assign({}, this._state);
 
-		this._store = Object.assign(this._store,partialstate);
+		this._state = Object.assign(this._state,partialstate);
 
 		this.markComponentsForUpdate(triggered,false);
 
@@ -53,20 +53,19 @@ export class StateManager{
 
 
 	/**
-	 * Resets the store
-	 * to the central state store
+	 * Resets the state
 	 * @package
 	 */
 	reset(){
-		let keys = Object.keys(this._store)
+		let keys = Object.keys(this._state)
 		for(let i = 0; i < keys.length; i++){
-			delete this._store[keys[i]];
+			delete this._state[keys[i]];
 		}
 
-		var old_store = this._store;
-		this._store = {};
+		var old_state = this._state;
+		this._state = {};
 		this.markComponentsForUpdate([],true);
-		this.flushComponentsUpdate(old_store);
+		this.flushComponentsUpdate(old_state);
 	}
 
 
@@ -111,9 +110,9 @@ export class StateManager{
 
 	/**
 	 * Notifies registered callbacks, if they subscribe to 
-	 * at least one of the changed store attributes.
+	 * at least one of the changed state attributes.
 	 * @param {Object} triggered - Changed properties
-	 * @param {Function} prevState - State store before updating
+	 * @param {Function} prevState - State before updating
 	 * @private
 	 */
 	notifyListeners(triggered,prevState){
@@ -224,29 +223,29 @@ export class StateManager{
 	 * Declares the intention of using a state
 	 * if the instance does not exists, it will be created.
 	 * @param {string} descriptor, descriptor for the declaring state
-	 * @returns {StateManager} a declared StateManager
+	 * @returns {Store} a declared Store
 	 */
 	static Declare(descriptor){
 		if(typeof(descriptor) !== 'string'){
-			throw new Error("Can not declare a state manager without a descriptor string");
+			throw new Error("Can not declare a store without a descriptor string");
 		}
-		if(_stateManagers_[descriptor]==null){
-			_stateManagers_[descriptor] = new StateManager();
+		if(_states_[descriptor]==null){
+			_states_[descriptor] = new Store();
 		}
-		return _stateManagers_[descriptor];
+		return _states_[descriptor];
 	}
 
 	/**
 	 * Return the state for the given descriptor
 	 * @param {string} descriptor
-	 * @returns {StateManager} the instance requested
+	 * @returns {Store} the instance requested
 	 */
 	static GetState(descriptor){
-		return _stateManagers_[descriptor] || null
+		return _states_[descriptor] || null
 	}
 }
 
-StateManager.defaultDescriptor  = "default"
+Store.defaultDescriptor  = "default"
 
 
 /**

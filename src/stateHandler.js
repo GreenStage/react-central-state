@@ -1,4 +1,4 @@
-import {StateManager} from './stateManager.js';
+import {Store} from './store.js';
 
 /**
  * StateHandler instances can listen and change the current
@@ -8,15 +8,15 @@ export class StateHandler{
 	
 	/**
 	 * Constructs a new Handler and 
-	 * declares the state manager to use.
+	 * declares a store instance to use.
 	 * @constructor
 	 */
 	constructor(){
-		this._stateManager_ = StateManager.Declare(this.useState());
+		this._store_ = Store.Declare(this.useState());
 
 		Object.defineProperty(this,'centralState',{
 			writable: 'false',
-			value: this._stateManager_._store
+			value: this._store_._state
 		})
 	}
 
@@ -25,7 +25,7 @@ export class StateHandler{
 	 * declared state
 	 */
 	useState(){
-		return StateManager.defaultDescriptor;
+		return Store.defaultDescriptor;
 	}
 
 	/**
@@ -33,7 +33,7 @@ export class StateHandler{
 	 * properties to assign to the current state
 	 */
 	setCentralState(partialstate){
-		this._stateManager_.setPartial(partialstate);
+		this._store_.setPartial(partialstate);
 	}
 
 	/**
@@ -46,7 +46,7 @@ export class StateHandler{
 	 * will trigger the callback on changing
 	 */
 	addCentralStateListener(callback,...triggers){
-		this._stateManager_.addListener(callback,triggers)
+		this._store_.addListener(callback,triggers)
 	}
 
 	/**
@@ -55,13 +55,13 @@ export class StateHandler{
 	 * with addCentralStateListener
 	 */
 	removeCentralStateListener(callback){
-		this._stateManager_.removeListener(callback)
+		this._store_.removeListener(callback)
 	}
 
 	/**
 	 * Resets the state properties
 	 */
 	resetCentralState(){ 
-		this._stateManager_.reset();
+		this._store_.reset();
 	}
 }
