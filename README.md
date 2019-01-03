@@ -39,12 +39,13 @@ triggers(){
 </h3>
 &nbsp;
 
-### Handling changes before re-rendering
-`StateComponent` instances can intercept updates with the `onCentralStateUpdated` method:
+### Should Component Update?
+`StateComponent` instances can intercept updates with the `onCentralStateUpdating` method:
 ```javascript
-//Invoked before rendering, receives a snapshot of the previous state as argument.
-//should return true if the component should update,or false otherwise. defaults to true.
-onCentralStateUpdated(prevState){
+//Invoked before the central state changes
+//It's like shouldComponentUpdate, but for central state changes.
+//should return true if the component should re-render,or false otherwise. defaults to true.
+onCentralStateUpdating(nextState){
     return true;
 }
 ```

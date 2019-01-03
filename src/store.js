@@ -39,12 +39,13 @@ export class Store{
 	 */
 	setPartial(partialstate){
 		var triggered = Object.keys(partialstate);
+		var prevstate = this._state;
+		var nextState = Object.assign({},this._state);
+		Object.assign(nextState,partialstate);
 
-		var prevstate = Object.assign({}, this._state);
-
-		this._state = Object.assign(this._state,partialstate);
-
-		this.markComponentsForUpdate(triggered,false,prevstate);
+		this.markComponentsForUpdate(triggered,false,nextState);
+		
+		this._state = nextState;
 
 		this.notifyListeners(triggered,prevstate);
 
@@ -61,10 +62,8 @@ export class Store{
 		for(let i = 0; i < keys.length; i++){
 			delete this._state[keys[i]];
 		}
-
-		var old_state = this._state;
+		this.markComponentsForUpdate([],true,{});
 		this._state = {};
-		this.markComponentsForUpdate([],true,old_state);
 		this.flushComponentsUpdate();
 	}
 
@@ -128,14 +127,14 @@ export class Store{
 	 * update
 	 * @param {Array<string>} triggered Triggered properties keys
 	 * @param {boolean=} all True if the update should trigger 
-	 * @param {Object} prevState Previous state
+	 * @param {Object} nextState next state
 	 * all components updating methods regardless of the passed
 	 * triggered properties
 	 * @private
 	 */
-	markComponentsForUpdate(triggered,all,prevState){
+	markComponentsForUpdate(triggered,all,nextState){
 		var _all = typeof(all) === 'boolean'? all: false
-		this._treeRoot.prepareUpdate(triggered,_all,prevState);
+		this._treeRoot.prepareUpdate(triggered,_all,nextState);
 	}
 
 
@@ -143,8 +142,8 @@ export class Store{
 	 * Rolls down the tree updating marked components
 	 * @private
 	 */
-	flushComponentsUpdate(prevState){
-		this._treeRoot.flushUpdate(prevState);
+	flushComponentsUpdate(){
+		this._treeRoot.flushUpdate();
 	}
 
 

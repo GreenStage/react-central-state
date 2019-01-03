@@ -33,17 +33,17 @@ export class ComponentTreeNode{
 	 * decision  to them.
 	 * @param {Array<string>} triggered , property keys that fired an update
 	 * @param {boolean} force, whether or not to update regardless of the triggers
-	 * @param {Object} prevState, state before the update
+	 * @param {Object} nextState, state after the update
 	 */
-	prepareUpdate(triggered,force,prevState){
+	prepareUpdate(triggered,force,nextState){
 		if(!this._isRoot && (force || haveCommon(this._triggers,triggered)) && 
 			//Give the component a change to avoid the update
-			this._component.onCentralStateUpdated(prevState) !== false){
+			this._component.onCentralStateUpdating(nextState) !== false){
 
 			this._pendingUpdate = true;
 		}else{
 			for(var i =0; i < this._childs.length; i++){
-				this._childs[i].prepareUpdate(triggered,force,prevState);
+				this._childs[i].prepareUpdate(triggered,force,nextState);
 			}
 		}
 	}

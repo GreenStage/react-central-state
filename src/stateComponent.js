@@ -21,8 +21,7 @@ export class StateComponent extends React.Component{
 
 		//For easy access
 		Object.defineProperty(this,'centralState',{
-			writable: 'false',
-			value: this._store_._state
+			get: ()=>{return this._store_._state}
 		});
 
 		this._triggers_ = this.triggers();
@@ -130,14 +129,12 @@ export class StateComponent extends React.Component{
 
 
 	/**
-	 * Called after the central state updates with relevant
-	 * changes on the properties referenced by triggers
-	 * method.
-	 * @param {Object} prevState snapshot of the central state before updating.
-	 * @returns {boolean} If the component should update 
+	 * Called before the central state updates
+	 * @param {Object} nextState Next state after the update takes place
+	 * @returns {boolean} If the component should re-render 
 	 * with this changes. Defaults to true.
 	 */
-	onCentralStateUpdated(prevState){
+	onCentralStateUpdating(nextState){
 		return true
 	};
 

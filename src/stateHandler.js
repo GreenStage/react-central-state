@@ -14,10 +14,10 @@ export class StateHandler{
 	constructor(){
 		this._store_ = Store.Declare(this.useState());
 
+		//For easy access
 		Object.defineProperty(this,'centralState',{
-			writable: 'false',
-			value: this._store_._state
-		})
+			get: ()=>{return this._store_._state}
+		});
 	}
 
 	/**
