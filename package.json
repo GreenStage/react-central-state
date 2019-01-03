@@ -1,7 +1,7 @@
 {
   "name": "react-central-state",
-  "version": "1.0.9",
-  "description": "Global state for react.",
+  "version": "1.0.10",
+  "description": "Easy-to-use global state for react",
   "main": "lib/index.js",
   "scripts": {
     "compile": "babel --presets es2015,stage-0 -d lib/ src/",

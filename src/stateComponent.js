@@ -70,12 +70,8 @@ export class StateComponent extends React.Component{
 			return this.childClass_render()
 		}
 
-		this._onCentralStateUpdated_ = function(prevState){
-			//Give the child class an opportunity to cancel the
-			//component update
-			if(this.onCentralStateUpdated(prevState) !== false){
-				this.forceUpdate();
-			}
+		this._updateComponent_ = function(){
+			this.forceUpdate();
 		}
 	}
 

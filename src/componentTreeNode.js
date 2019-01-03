@@ -33,13 +33,17 @@ export class ComponentTreeNode{
 	 * decision  to them.
 	 * @param {Array<string>} triggered , property keys that fired an update
 	 * @param {boolean} force, whether or not to update regardless of the triggers
+	 * @param {Object} prevState, state before the update
 	 */
-	prepareUpdate(triggered,force){
-		if(!this._isRoot && (force || haveCommon(this._triggers,triggered))){
+	prepareUpdate(triggered,force,prevState){
+		if(!this._isRoot && (force || haveCommon(this._triggers,triggered)) && 
+			//Give the component a change to avoid the update
+			this._component.onCentralStateUpdated(prevState) !== false){
+
 			this._pendingUpdate = true;
 		}else{
 			for(var i =0; i < this._childs.length; i++){
-				this._childs[i].prepareUpdate(triggered);
+				this._childs[i].prepareUpdate(triggered,force,prevState);
 			}
 		}
 	}
@@ -50,12 +54,12 @@ export class ComponentTreeNode{
 	 * If the component updated after calling prepareUpdate,
 	 * the update is considered useless and canceled
 	 */
-	flushUpdate(prevState){
+	flushUpdate(){
 		if(this._pendingUpdate === true){
-			this._component._onCentralStateUpdated_(prevState);
+			this._component._updateComponent_();
 		}else{
 			for(var i =0; i < this._childs.length; i++){
-				this._childs[i].flushUpdate(prevState);
+				this._childs[i].flushUpdate();
 			}
 		}
 	}

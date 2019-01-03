@@ -44,11 +44,11 @@ export class Store{
 
 		this._state = Object.assign(this._state,partialstate);
 
-		this.markComponentsForUpdate(triggered,false);
+		this.markComponentsForUpdate(triggered,false,prevstate);
 
 		this.notifyListeners(triggered,prevstate);
 
-		this.flushComponentsUpdate(prevstate);
+		this.flushComponentsUpdate();
 	}
 
 
@@ -64,8 +64,8 @@ export class Store{
 
 		var old_state = this._state;
 		this._state = {};
-		this.markComponentsForUpdate([],true);
-		this.flushComponentsUpdate(old_state);
+		this.markComponentsForUpdate([],true,old_state);
+		this.flushComponentsUpdate();
 	}
 
 
@@ -128,13 +128,14 @@ export class Store{
 	 * update
 	 * @param {Array<string>} triggered Triggered properties keys
 	 * @param {boolean=} all True if the update should trigger 
+	 * @param {Object} prevState Previous state
 	 * all components updating methods regardless of the passed
 	 * triggered properties
 	 * @private
 	 */
-	markComponentsForUpdate(triggered,all){
+	markComponentsForUpdate(triggered,all,prevState){
 		var _all = typeof(all) === 'boolean'? all: false
-		this._treeRoot.prepareUpdate(triggered,_all);
+		this._treeRoot.prepareUpdate(triggered,_all,prevState);
 	}
 
 
