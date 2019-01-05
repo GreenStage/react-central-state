@@ -1,7 +1,7 @@
 import React from 'react';
-import {StateComponent} from 'react-central-state';
+import {CSComponent} from 'react-central-state';
 
-export class Creator extends StateComponent {
+class Creator extends React.Component {
 	constructor(props){
 		super(props);
 		this.setCentralState({todos:[]});
@@ -13,7 +13,7 @@ export class Creator extends StateComponent {
 		this.setCentralState({new_todo:desc});
 	}
 
-	triggers(){
+	updateWith(){
 		return ["confirmation"];
 	}
 
@@ -35,3 +35,5 @@ export class Creator extends StateComponent {
 		);
 	}
 }
+
+export default CSComponent(Creator)

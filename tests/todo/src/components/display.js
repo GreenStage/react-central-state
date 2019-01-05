@@ -1,7 +1,7 @@
 import React from 'react';
-import {StateComponent} from 'react-central-state';
+import {CSComponent} from 'react-central-state';
 
-export class Display extends StateComponent {
+export class Display extends React.Component {
 	constructor(props){
 		super(props);
 
@@ -31,7 +31,7 @@ export class Display extends StateComponent {
 		}
 	}
 
-	triggers(){
+	updateWith(){
 		return ["todos"];
 	}
 
@@ -46,3 +46,4 @@ export class Display extends StateComponent {
 		</div>);
 	}
 }
+export default CSComponent(Display)

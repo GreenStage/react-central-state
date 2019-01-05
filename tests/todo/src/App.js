@@ -1,14 +1,14 @@
 import React from 'react';
-import {StateComponent} from 'react-central-state';
-import { Creator } from './components/creator';
-import { Display } from './components/display';
+import {CSComponent} from 'react-central-state';
+import  Creator  from './components/creator';
+import  Display  from './components/display';
 
-class App extends StateComponent {
+class App extends React.Component {
 	constructor(props){
 		super(props);
 		this.state ={name:"Todo List"};
 	}
-	triggers(){
+	updateWith(){
 		return [];
 	}
 	render() {
@@ -22,4 +22,4 @@ class App extends StateComponent {
 	}
 }
 
-export default App;
+export default CSComponent(App);
