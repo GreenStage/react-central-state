@@ -136,7 +136,7 @@ export class StoreInstantiable{
 			if(this._keyRefsAssoc[t] == null || !Array.isArray(this._keyRefsAssoc[t])){
 				continue;
 			}
-			let idx = this._keyRefsAssoc.indexOf(ref);
+			let idx = this._keyRefsAssoc[t].indexOf(ref);
 			if(idx !== -1){
 				this._keyRefsAssoc[t].splice(idx,1);
 				break;

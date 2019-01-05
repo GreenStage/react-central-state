@@ -1,6 +1,6 @@
 {
   "name": "react-central-state",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "Easy-to-use global state for react",
   "main": "lib/index.js",
   "scripts": {
