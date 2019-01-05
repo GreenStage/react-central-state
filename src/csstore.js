@@ -37,7 +37,6 @@ class ComponentRefNode{
 export class StoreInstantiable{
 	constructor(){
 		this._registeredListeners = [];
-		this._rootCmp = new ComponentRefNode(null,0);
 		this._keyRefsAssoc = {};
 		this._mountingLevelCtr = 0;
 		this._state = {};
@@ -53,7 +52,7 @@ export class StoreInstantiable{
 
 		let updatingCmpRefs = this.markComponentsForUpdate(triggered);
 		
-		this._state = this._nextState;
+		this._state = Object.freeze(this._nextState);
 
 		this.notifyListeners(triggered,prevstate);
 		this.flushComponentsUpdate(updatingCmpRefs);
@@ -137,11 +136,10 @@ export class StoreInstantiable{
 			if(this._keyRefsAssoc[t] == null || !Array.isArray(this._keyRefsAssoc[t])){
 				continue;
 			}
-			for(let i=0; i < this._keyRefsAssoc[t].length;i++){
-				if(this._keyRefsAssoc[t][i] === ref){
-					this._keyRefsAssoc[t].splice(i,1);
-					break;
-				}
+			let idx = this._keyRefsAssoc.indexOf(ref);
+			if(idx !== -1){
+				this._keyRefsAssoc[t].splice(idx,1);
+				break;
 			}
 		}
 	}
@@ -164,6 +162,6 @@ export class StoreInstantiable{
  * @param {Object} prevState
  */
 
- 
+
 const Store = new StoreInstantiable();
 export default Store;

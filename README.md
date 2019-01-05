@@ -57,13 +57,14 @@ You can also subscribe callbacks to central state properties changes, with `addC
 ```javascript
 //callback receives a snapshot of the previous state.
 this.callback = function(prevState){
-    let foo = this.centralState.foo;
+	let foo = this.centralState.foo;
+	let prevFoo = prevState.foo;
     ...
 };
 
-//Pass the callback, with a central state property key, 
-//that when changes value will invoke it.
-this.addCentralStateListener(this.callback,'foo');
+//Pass the callback, with a list of central state property keys, 
+//that when change value will invoke it.
+this.addCentralStateListener(this.callback,'foo','other');
 ```
 
 You probably want to unsubscribe on unmounting:
