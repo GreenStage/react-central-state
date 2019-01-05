@@ -1,7 +1,7 @@
-import {StateComponent} from './stateComponent'
-import {StateHandler} from './stateHandler'
+import {CSComponent} from './cshoc'
+import {CSHandler} from './cshandler'
 
 export{
-	StateComponent,
-	StateHandler
+	CSComponent,
+	CSHandler
 }

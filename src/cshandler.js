@@ -1,10 +1,10 @@
-import {Store} from './store.js';
+import Store from './csstore.js';
 
 /**
  * StateHandler instances can listen and change the current
  * central state, as well as provide callbacks for its changes.
  */
-export class StateHandler{
+export class CSHandler{
 	
 	/**
 	 * Constructs a new Handler and 
@@ -12,20 +12,10 @@ export class StateHandler{
 	 * @constructor
 	 */
 	constructor(){
-		this._store_ = Store.Declare(this.useState());
-
 		//For easy access
 		Object.defineProperty(this,'centralState',{
-			get: ()=>{return this._store_._state}
+			get: ()=>{return Store._state}
 		});
-	}
-
-	/**
-	 * @returns {string} the statekey refering to the
-	 * declared state
-	 */
-	useState(){
-		return Store.defaultDescriptor;
 	}
 
 	/**
@@ -33,7 +23,7 @@ export class StateHandler{
 	 * properties to assign to the current state
 	 */
 	setCentralState(partialstate){
-		this._store_.setPartial(partialstate);
+		Store.setPartial(partialstate);
 	}
 
 	/**
@@ -46,7 +36,7 @@ export class StateHandler{
 	 * will trigger the callback on changing
 	 */
 	addCentralStateListener(callback,...triggers){
-		this._store_.addListener(callback,triggers)
+		Store.addListener(callback,...triggers)
 	}
 
 	/**
@@ -55,13 +45,6 @@ export class StateHandler{
 	 * with addCentralStateListener
 	 */
 	removeCentralStateListener(callback){
-		this._store_.removeListener(callback)
-	}
-
-	/**
-	 * Resets the state properties
-	 */
-	resetCentralState(){ 
-		this._store_.reset();
+		Store.removeListener(callback)
 	}
 }
