@@ -7,19 +7,21 @@ import Store from './csstore.js';
  */
 export function CSComponent(wrappedComponent){
 
-	if(!wrappedComponent.prototype.isReactComponent){
-		throw new Error('Component should extend React.Component.');
+	if(wrappedComponent == null || !wrappedComponent.prototype.isReactComponent){
+		throw new Error('Wrapped object should extend React.Component.');
 	}
 
 	Object.defineProperty(wrappedComponent.prototype,'centralState',{
 		get: ()=>{return Store._state}
 	});
 	
+	var name = wrappedComponent.displayName ||  wrappedComponent.name;
+
 	var wrapper = class extends wrappedComponent{
 		constructor(props){
 			super(props);
 			if( !this.updateWith || typeof(this.updateWith) !== 'function'){
-				throw new Error('CSComponents need to implement the updateWith() method.');
+				throw new Error(name +' does not implement updateWith() method.');
 			}
 
 			this.triggers = this.updateWith();
@@ -76,6 +78,6 @@ export function CSComponent(wrappedComponent){
 		}
 	}
 
-	wrapper.displayName = wrappedComponent.displayName ||  wrappedComponent.name;
+	wrapper.displayName = name;
 	return wrapper;
 }

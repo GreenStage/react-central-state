@@ -35,8 +35,8 @@ this.setCentralState({foo:'bar'});
 
 The only requirement it will add to your component is implementing the `updateWith` method:
 ```javascript
-/*CSComponent wrapped react components need to implement this.
-Should return an array of strings of central state's properties that would trigger an update on this component. Can be an empty array*/
+/*React components wrapped in CSComponent need to implement this.
+Should return an array of central state's property keys that would trigger an update on this component when changed. Can be an empty array*/
 updateWith(){
     return['foo','someOtherProperty','someOtherProperty2'];
 }

@@ -52,7 +52,7 @@ export class StoreInstantiable{
 
 		let updatingCmpRefs = this.markComponentsForUpdate(triggered);
 		
-		this._state = Object.freeze(this._nextState);
+		this._state = this._nextState;
 
 		this.notifyListeners(triggered,prevstate);
 		this.flushComponentsUpdate(updatingCmpRefs);
