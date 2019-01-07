@@ -44,9 +44,9 @@ updateWith(){
 ### <b>That's pretty much it.</b>
 &nbsp;
 ### Should Component Update?
-Components wrapped with `CSComponent` have their `shoudComponentUpdate` injected with `nextCentralState` as third parameter:
+Components wrapped with `CSComponent` have their `shouldComponentUpdate` injected with `nextCentralState` as third parameter:
 ```javascript
-shoudComponentUpdate(nextProps,nextState,nextCentralState){
+shouldComponentUpdate(nextProps,nextState,nextCentralState){
 	//Do your thing
 }
 ```
