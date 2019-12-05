@@ -1,25 +1,30 @@
 {
   "name": "react-central-state",
-  "version": "1.0.15",
+  "version": "1.0.30",
   "description": "Easy-to-use global state for react",
-  "main": "lib/index.js",
-  "scripts": {
-    "compile": "babel --presets es2015,stage-0 -d lib/ src/",
-    "prepublish": "npm run compile"
-  },
+  "main": "./dist/index.js",
+  "publish:npm": "rm -rf dist && mkdir dist &&  babel src/components -d dist --copy-files",
+  "scripts":{
+    "build":"rm -rf dist && mkdir dist &&  babel src -d dist --copy-files"
+   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GreenStage/react-central-state.git"
   },
+"babel": {
+  "presets": [
+    "@babel/preset-react"
+  ]
+},
   "keywords": [
-	"react",
+    "react",
     "reactjs",
-	"react-component",
+    "react-component",
     "central",
     "state",
     "global",
-	"store",
-	"state management"
+    "store",
+    "state management"
   ],
   "author": "Eduardo Gomes <technikome@gmail.com>",
   "license": "MIT",
@@ -31,11 +36,13 @@
     "react": "^16.4.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
-    "react": "^16.4.0",
-    "react-addons-test-utils": "15.6.2"
+    "@babel/cli": "^7.7.4",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.7.4",
+    "babel-core": "^7.0.0-bridge.0"
+  },
+  "dependencies": {
+    "react": "^16.8.6"
   }
 }

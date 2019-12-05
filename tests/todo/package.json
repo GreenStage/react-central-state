@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "react": "^16.7.0",
-    "react-central-state": "^1.0.12",
+    "react-central-state": "^1.0.30",
     "react-dom": "^16.7.0",
     "react-scripts": "^2.1.3"
   },
