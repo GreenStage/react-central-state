@@ -1,4 +1,8 @@
 # react-central-state
+
+[![npm](https://img.shields.io/npm/v/react-central-state.svg)](https://www.npmjs.com/package/react-central-state)
+
+
 Easy to use global state for React.  
 Shared along all components, updating them only when needed.
 No reducers, no actions, no providers.
