@@ -9,7 +9,7 @@ No reducers, no actions, no providers.
 
 ## Installation
 
-Requires react *16.4.0* or later
+Requires react *16.8.6* or later
 
 `npm install --save react-central-state`
 
